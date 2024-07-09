@@ -5,3 +5,5 @@ scipy
 Pillow
 gunicorn
 django
+opencv-python-headless
+moviepy
