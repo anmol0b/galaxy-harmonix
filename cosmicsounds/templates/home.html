@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="main-video-container">
+        <video class="main-video" controls autoplay loop muted>
+            <source src="{% static 'one1.mp4' %}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="intro">
+            <h1>Explore the Wonders of the Universe</h1>
+            <p>Experience the universe like never before with NASA's 3D Space Sonification application. Hear the cosmos
+                and discover the beauty of celestial objects through sound.</p>
+        </div>
+
+    </div>
+    <div class="container">
+        <div class="row brief"><h2>Galaxy Harmonix</h2>
+        <p>Embark on a cosmic symphony, where the universe speaks through sound.
+
+In our innovative project, we're taking you on an auditory journey through the wonders of space. Imagine watching NASA fly-through videos and not only seeing the stunning visuals but also hearing the cosmos come alive. We're using cutting-edge techniques to transform these videos into immersive soundscapes, where each pixel's properties - like color and brightness - are translated into unique sound qualities. It's a fusion of science and art, turning the mysteries of the universe into an accessible and captivating experience for everyone. So, join us as we unlock the cosmos with the power of sound.
+
+This README provides essential information to get you started with the project.</p>
+        <a class="text-decoration-none text-center see-docs" href="{% url 'about' %}">See Docs</a></div>
+    </div>
+</div>
+</div>
+{% endblock %}

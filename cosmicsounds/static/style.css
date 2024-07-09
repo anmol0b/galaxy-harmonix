@@ -1,0 +1,198 @@
+nav {
+  height: 75px;
+}
+h1 {
+  color: #333;
+}
+
+h2 {
+  color: #444;
+}
+
+#logo {
+  width: 4vw;
+}
+
+.header-link {
+  color: chartreuse;
+  position: relative;
+}
+
+.header-link::after {
+  content: ""; /* Required content property for ::after */
+  position: absolute;
+  width: 100%;
+  height: 1px; /* Set the desired height of the underline */
+  bottom: 0;
+  left: 0;
+  background-color: #000; /* Change to the desired underline color */
+  opacity: 0; /* Initially invisible */
+  transition: opacity 0.3s ease;
+}
+
+.header-link:hover::after {
+  opacity: 1; /* Show the underline on hover */
+}
+
+.main-video-container {
+  height: 90vh;
+  cursor: pointer;
+  position: relative;
+}
+
+.main-video-container .main-video {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.intro {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  width: 100%;
+}
+.intro h1 {
+  font-size: 5rem;
+  text-align: center;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  color: #fff;
+}
+
+.intro p {
+  font-size: 1.5rem;
+  text-align: center;
+  color: #fff;
+  width: 1000px;
+  margin: 0 auto;
+}
+.main-video-container .brief {
+margin-top:"25px";
+}
+.main-video-container .brief h2{
+        color: black;
+        }
+}.main-video-container .brief p{
+        font-family: fangsong;
+        font-size:1.2rem;
+}
+.main-video-container .see-docs{
+        border: 1px solid gray;
+    width: 130px;
+    padding: 5px 8px;
+    margin: auto;
+    color:"black"
+}
+
+.video-container {
+  width: 25vw;
+  height: 35vh;
+  position: relative;
+}
+
+.video-container .main-video {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.video-container .arrow {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  opacity: 0;
+  cursor: pointer;
+  transition: all ease 1;
+}
+
+.video-container .arrow:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.video-detail-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.video-detail-container .main-video {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+.video-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  font-family: Arial, Helvetica, sans-serif;
+  position: relative;
+}
+
+.video-title::after {
+  content: "";
+  position: absolute;
+  height: 3px;
+  width: 300px;
+  left: 38%;
+  background-color: #000;
+  bottom: 12px;
+}
+
+.video-caption h2{
+  color: #000;
+}
+.video-caption p{
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 1.2rem;
+}
+
+.footer {
+  margin-top: 40px;
+  padding: 30px 0;
+}
+
+.footer .footer-link:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.mycontainer {
+  margin: 30px auto;
+  width: 45%;
+  max-width: 800px;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  text-align: center;
+}
+
+.threshold-input{
+  display: flex;
+  flex-direction: column;
+  width: 100px;
+  gap: 10px;
+}
+.threshold-input input{
+  display: flex;
+  flex-direction: column;
+  width: 100px;
+  gap: 10px;
+}
+.threshold-input button{
+  border: none;
+  padding: 8px;
+  background-color: aquamarine;
+  color: #000;
+  text-transform: uppercase;
+  font-weight: 700;
+}

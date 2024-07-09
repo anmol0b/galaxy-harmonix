@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <h2 class="text-center my-lg-5">All Videos</h2>
+    <div class="row row-gap-5 mb-5">
+        {% for video in videos_list %}
+        <div class="col-lg-4">
+            <a href="{% url 'video_detail_page' video.id %}" class="text-decoration-none">
+                <div class="video-container">
+                    <video class="main-video">
+                        <source src="{% static video.video_src %}" type="video/mp4">
+                    </video>
+                    <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                </div>
+                <div class="text-center text-black fs-4 fw-semibold my-2">{{video.video_thumbnail}}</div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,90 @@
+
+
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+
+
+<div class="container my-5">
+    <h1>About NASA Space Sonification</h1>
+    <p>
+        The NASA Space Sonification project is a fascinating initiative that allows individuals to explore the
+        universe through sound. By translating complex 3D space datasets into auditory experiences, this project
+        aims to provide a unique and immersive way to understand and appreciate the wonders of the cosmos.
+    </p>
+    <p>
+        The project leverages advanced instruments and sophisticated techniques to convert astronomical data into
+        sound, providing users with a different perceptual path to explore space objects and phenomena.
+    </p>
+    <h2>Our Mission</h2>
+    <p>
+        Our mission is to make the universe more accessible and engaging to a wide range of audiences, from space
+        enthusiasts to scientists. By combining science, technology, and creativity, we hope to inspire curiosity
+        and foster a deeper connection with the cosmos.
+    </p>
+</div>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sonification of Data</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 24px;
+      font-weight: bold;
+    }
+    p {
+      font-size: 18px;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Sonification of Data -->
+<h1>Sonification of Data</h1>
+<p>Image Sonification is the transformation of image into sounds. It helps to interpret visual data through sounds.</p>
+
+<!-- Steps involved in sonification -->
+<h1>Steps involved in sonification</h1>
+
+<!-- Step 1: Fourier Transformation -->
+<h1>Step 1: Fourier Transformation</h1>
+<p>To generate a variety of sounds, we need Fourier Transformation of sound clips to make sine waves that can be used with varying frequencies. It generates complex sounds with the help of a combination of various sine waves of different frequencies.</p>
+<img src="{% static 'asd.png' %}" alt="Fourier Transformation">
+<img src="{% static 'fourier.png' %}" alt="Fourier Transformation">
+<img src="{% static 'fourier2.png' %}" alt="Fourier Transformation">
+<img src="{% static 'generated.png' %}" alt="Fourier Transformation">
+
+<!-- Step 2: Pixel-to-Sound Mapping -->
+<h1>Step 2: Pixel-to-Sound Mapping</h1>
+<p>Pixel values (RGBL) are mapped with the properties of sounds. And so the sounds are generated according to the scene and color composition of the present frame.</p>
+
+<!-- Step 3: Combining Waves -->
+<h1>Step 3: Combining Waves</h1>
+<p>Detail the third step of combining the waves extracted from each frame. Discuss the orchestration of this combination, akin to composing a symphony.</p>
+
+<!-- The Frame area selection -->
+<h1>The Frame Area Selection</h1>
+<p>In our solution, we have selected 2 square borders which are producing stars sounds when they go through the frames. Calculation of the percentage composition of RGB in each frame to produce background sounds.</p>
+
+
+</body>
+</html>
+
+
+
+
+
+{% endblock %}

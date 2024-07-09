@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container">
+    {{threshold_value}}
+    <div class="row">
+        <div class="video-detail-container">
+            <video class="main-video" controls autoplay loop muted>
+                <source src="./static/output_video.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% load static %}
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <title>NASA 3D Space Sonification</title>
+</head>
+
+<body>
+    <nav class="nav w-100 text-white bg-black d-flex justify-content-between align-items-center px-5">
+        <div class="d-flex align-items-center">
+            <img id="logo" src="{% static 'nasa-logo.png' %}" alt="Nasa-logo">
+            <a class="fw-bold fs-3 text-decoration-none text-white" href="{% url 'home' %}">CosmicSOUND</a>
+        </div>
+        <ul class="d-flex align-items-center list-unstyled gap-4 mt-0 mb-0" style="cursor: pointer;">
+            <a href="{% url 'home' %}" class="text-decoration-none text-white">
+                <li class="header-link">Home</li>
+            </a>
+            <a href="{% url 'about' %}" class="text-decoration-none text-white">
+                <li class="header-link">Documetation</li>
+            </a>
+            <a href="{% url 'videos_page' %}" class="text-decoration-none text-white">
+                <li class="header-link">Videos</li>
+            </a>
+        </ul>
+    </nav>
+    {% block content %}
+
+    {% endblock %}
+
+    <footer class="bg-black footer">
+        <div class="container">
+            <div class="row text-center text-white mx-5">
+                <p>The NASA CosmicSounds is a project of international cooperation
+                    between
+                    NASA and ESA. AURA’s Space Telescope
+                    Science Institute in Baltimore, Maryland, conducts Hubble science operations.
+                </p>
+            </div>
+            <div class="row text-white border-bottom mb-3">
+                <div class="col-sm d-flex align-items-center justify-content-center">
+                    <div class="d-flex align-items-center">
+                        <img id="logo" style="width: 4vw;" src="{% static 'nasa-logo.png' %}" alt="Nasa-logo">
+                        <a class="fw-bold fs-3 text-decoration-none text-white" href="{% url 'home' %}">CosmicSOUND</a>
+                    </div>
+                </div>
+                <div class="col-sm d-flex align-items-center justify-content-center">
+                    <ul class="list-unstyled">
+                        <li class="link-secondary footer-link mb-2">About Us</li>
+                        <li class="link-secondary footer-link mb-2">Contact us</li>
+                        <li class="link-secondary footer-link mb-2">Github</li>
+                        <li class="link-secondary footer-link mb-2">Facebook</li>
+                    </ul>
+                </div>
+            </div>
+            <p class="text-center text-white">© 2023 CosmicSounds. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

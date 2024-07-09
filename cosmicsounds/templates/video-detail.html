@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="video-title text-center my-lg-5">
+            <p>{{selected_video.video_thumbnail}}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="video-detail-container">
+            <video class="main-video" controls autoplay loop muted>
+                <source src="{% static selected_video.video_src %}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="video-details text-center my-5">
+            <h2>About This video</h2>
+        </div>
+        <div class="video-caption">
+            <h2>Caption</h2>
+            <p>{{selected_video.video_caption}}</p>
+        </div>
+    </div>
+    <div class="row">
+        <h4 class="text-black">Thresold pixel value</h4>
+        <form method="post">
+            {% csrf_token %}
+            <div class="threshold-input">
+                <input type="number" id="numberInput" value="80" name="numberInput" min="0" max="255" required>
+                <button type="submit">process</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
