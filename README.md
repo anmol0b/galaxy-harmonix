@@ -13,7 +13,7 @@ In our innovative project, we're taking you on an auditory journey through the w
 
 1. Clone the repository to your local machine:
 ```commandline
-git clone https://github.com/ilovetensor/galaxy-harmonix
+git clone https://github.com/itsanmollll/galaxy-harmonix
 ```
 
 2. Change your working directory to the project's django-files folder:
