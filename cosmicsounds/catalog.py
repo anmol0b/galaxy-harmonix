@@ -11,6 +11,7 @@ class Video:
     slug: str
     title: str
     caption: str
+    suggested_threshold: int = 80  # starting slider value that finds a good number of stars
 
     @property
     def static_path(self) -> str:
@@ -37,6 +38,7 @@ VIDEOS = (
             "and 2016. Shells of carbon dust blown off the star expand and change shape, while "
             "searchlight beams from the star's surface shift through the dust."
         ),
+        suggested_threshold=25,
     ),
     Video(
         id=3,

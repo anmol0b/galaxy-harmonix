@@ -75,3 +75,8 @@ def test_processing_failure_shows_error(client, monkeypatch, media_root):
 
     assert "Something went wrong" in response.content.decode()
     assert not list((media_root / "sonified").iterdir())
+
+
+def test_detail_form_starts_at_the_suggested_threshold(client):
+    response = client.get(reverse("video_detail", args=[2]))
+    assert response.context["form"]["threshold"].value() == 25

@@ -28,7 +28,7 @@ def videos_page(request):
 
 def video_detail(request, video_id):
     video = get_video(video_id)
-    form = ThresholdForm(request.POST or None)
+    form = ThresholdForm(request.POST or None, initial={"threshold": video.suggested_threshold})
     if request.method == "POST" and form.is_valid():
         return redirect("sonified_video", video_id=video.id, threshold=form.cleaned_data["threshold"])
     return render(request, "video-detail.html", {"video": video, "form": form})
