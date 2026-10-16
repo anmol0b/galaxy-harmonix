@@ -12,4 +12,4 @@ for reference, are not part of the app, and are not linted or tested. Most expec
 | `timbre_from_fft.py` | Extracting overtone weights from a recording's spectrum |
 | `ring_mask.py` | Selecting pixels in a circular ring |
 
-The other scripts also need `pip install matplotlib pillow`.
+The other scripts also need `pip install matplotlib pillow scipy`.

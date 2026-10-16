@@ -1,6 +1,5 @@
 import numpy as np
 import pytest
-from scipy.io import wavfile
 
 from processing import synth
 
@@ -45,7 +44,7 @@ def test_note_shape():
 def test_timbre_from_wav_recovers_harmonics(tmp_path):
     path = tmp_path / "tone.wav"
     tone = synth.apply_overtones(100, 1.0, [0.7, 0.0, 0.3])
-    wavfile.write(path, synth.SAMPLE_RATE, tone.astype(np.int16))
+    synth.write_wav(path, synth.SAMPLE_RATE, tone.astype(np.int16))
 
     factor = synth.timbre_from_wav(path, 100)
     assert factor.sum() == pytest.approx(1.0)
@@ -58,3 +57,11 @@ def test_to_int16_normalises_and_handles_silence():
     assert out.dtype == np.int16
     assert np.abs(out).max() == int(0.8 * 32767)
     assert not synth.to_int16(np.zeros(10)).any()
+
+
+def test_wav_round_trip(tmp_path):
+    samples = np.array([0, 1000, -1000, 32767, -32768], dtype=np.int16)
+    synth.write_wav(tmp_path / "x.wav", 22_050, samples)
+    rate, data = synth.read_wav(tmp_path / "x.wav")
+    assert rate == 22_050
+    np.testing.assert_array_equal(data, samples)

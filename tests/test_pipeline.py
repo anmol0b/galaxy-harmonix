@@ -2,9 +2,8 @@ import subprocess
 
 import imageio_ffmpeg
 import pytest
-from scipy.io import wavfile
 
-from processing import SonifyConfig, sonify, sonify_video
+from processing import SonifyConfig, sonify, sonify_video, synth
 from processing.__main__ import main
 
 
@@ -12,7 +11,7 @@ def test_sonify_writes_one_second_per_second_of_video(star_video, tmp_path):
     out = tmp_path / "out.wav"
     result = sonify(star_video, out)
 
-    rate, data = wavfile.read(out)
+    rate, data = synth.read_wav(out)
     assert rate == 44_100
     assert result.frames_analysed == 3
     assert data.size / rate == pytest.approx(3.0, abs=0.01)

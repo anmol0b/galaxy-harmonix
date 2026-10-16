@@ -1,5 +1,4 @@
 Django>=5.2,<5.3
 numpy>=2.0,<3
-scipy>=1.13,<2
 opencv-python-headless>=4.10
 imageio-ffmpeg>=0.5

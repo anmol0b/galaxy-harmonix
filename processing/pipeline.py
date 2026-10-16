@@ -20,7 +20,6 @@ from pathlib import Path
 import cv2
 import imageio_ffmpeg
 import numpy as np
-from scipy.io import wavfile
 
 from . import synth
 from .vision import channel_percentages, hot_counts, ring_boxes
@@ -132,7 +131,7 @@ def sonify(video_path: str | Path, audio_path: str | Path, config: SonifyConfig 
         raise ValueError(f"no frames could be read from {video_path}")
 
     signal = np.concatenate(chunks)
-    wavfile.write(str(audio_path), synth.SAMPLE_RATE, synth.to_int16(signal))
+    synth.write_wav(audio_path, synth.SAMPLE_RATE, synth.to_int16(signal))
     if progress:
         progress(1.0)
     return SonifyResult(len(chunks), notes, signal.size / synth.SAMPLE_RATE)

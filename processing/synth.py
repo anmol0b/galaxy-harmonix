@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
+import wave
 from pathlib import Path
 
 import numpy as np
-from scipy.io import wavfile
 
 SAMPLE_RATE = 44_100
 AMPLITUDE = 4096
@@ -104,7 +104,7 @@ def timbre_from_wav(path: str | Path, frequency: float, clip: tuple[int, int] | 
     The ``top_n`` strongest frequency bins are snapped to the nearest harmonic of ``frequency``
     and their magnitudes summed per harmonic.
     """
-    sample_rate, data = wavfile.read(path)
+    sample_rate, data = read_wav(path)
     if data.ndim > 1:
         data = data.mean(axis=1)
     if clip is not None:
@@ -122,6 +122,25 @@ def timbre_from_wav(path: str | Path, frequency: float, clip: tuple[int, int] | 
 
     factor = np.bincount(harmonics - 1, weights=magnitudes)
     return factor / factor.sum()
+
+
+def read_wav(path: str | Path) -> tuple[int, np.ndarray]:
+    """Read a 16-bit PCM WAV file as ``(sample_rate, samples)``; stereo comes back as (n, channels)."""
+    with wave.open(str(path), "rb") as wav:
+        if wav.getsampwidth() != 2:
+            raise ValueError(f"{path}: only 16-bit PCM WAV is supported")
+        data = np.frombuffer(wav.readframes(wav.getnframes()), dtype="<i2")
+        channels = wav.getnchannels()
+        return wav.getframerate(), data.reshape(-1, channels) if channels > 1 else data
+
+
+def write_wav(path: str | Path, sample_rate: int, samples: np.ndarray) -> None:
+    """Write mono 16-bit PCM samples to a WAV file."""
+    with wave.open(str(path), "wb") as wav:
+        wav.setnchannels(1)
+        wav.setsampwidth(2)
+        wav.setframerate(sample_rate)
+        wav.writeframes(np.asarray(samples, dtype="<i2").tobytes())
 
 
 def to_int16(signal: np.ndarray, headroom: float = 0.8) -> np.ndarray:
