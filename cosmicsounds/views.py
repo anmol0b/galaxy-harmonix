@@ -1,98 +1,65 @@
-from django.shortcuts import render,redirect
-from processing import video_generator
-from processing.utils import *
+import logging
+from pathlib import Path
+
+from django.conf import settings
+from django.contrib.staticfiles import finders
+from django.http import Http404
+from django.shortcuts import redirect, render
+
+from processing import SonifyConfig, sonify_video
+
+from .catalog import VIDEOS, get_video
+from .forms import ThresholdForm
+
+logger = logging.getLogger(__name__)
+
 
 def home(request):
-    return render(request,'home.html')
+    return render(request, "home.html", {"featured": VIDEOS[0]})
+
 
 def about(request):
-    return render(request,'about.html')
+    return render(request, "about.html")
 
 
 def videos_page(request):
-    videos_list = [
-        {
-            "id":1,
-            "video_src":"./static/one1.mp4".lstrip("./static/"),
-            "video_thumbnail":"Cosmic Reef Visualization"
-        },
-        {
-            "id":2,
-            "video_src":"./static/four4.mp4".lstrip("./static/"),
-            "video_thumbnail":"Carbon Star CW Leonis Dissolve Sequence",
-        },
-        {
-            "id":3,
-            "video_src":"./static/three.mp4".lstrip("./static/"),
-            "video_thumbnail":"Time-Lapse Video of Didymos-Dimorphos"
-        },
-
-    ]
-    return render(request,'videos.html',{"videos_list":videos_list})
-
-def video_detail_page(request,video_id):
-    if request.method  == "POST":
-        threshold_value = request.POST.get('numberInput')
-        return redirect("processed_video",video_id, threshold_value)
-    else:
-        videos_list = [
-        {
-            "id":1,
-            "video_src":"./static/one1.mp4".lstrip("./static/"),
-            "video_thumbnail":"Cosmic Reef Visualization",
-            "video_caption":"This science visualization presents the dramatic landscape of two nebulas in the Large Magellanic Cloud. The video takes viewers on a close-up tour of the nebulas' three-dimensional structures, as deduced by scientists and artists. The visualization is an interpretation of the nebulas' complex structure and is based on images by NASA's Hubble Space Telescope."
-        },
-        {
-            "id":2,
-            "video_src":"./static/four4.mp4".lstrip("./static/"),
-            "video_thumbnail":"Carbon Star CW Leonis Dissolve Sequence",
-            "video_caption":"This is a time-lapse set of images of the aging red giant star CW Leonis, taken on three dates: 2001, 2011, and 2016. The star is embedded inside gossamer cobwebs of dust encircling the star. These are really shells of carbon dust blown off the star. As they expand into space they change shape, as seen between the Hubble Space Telescope exposures. Brilliant searchlight beams from the star's surface poke through the dust. These beams change orientation through the different dates the Hubble photographs were taken. "
-        },
-            {
-                "id": 3,
-                "video_src": "./static/three.mp4".lstrip("./static/"),
-                "video_thumbnail": "Time-Lapse Video of Didymos-Dimorphos",
-                "video_caption":"This movie captures the breakup of the asteroid Dimorphos when it was deliberately hit by NASA's 1,200-pound Double Asteroid Redirection Test (DART) mission spacecraft on September 26, 2022. The Hubble Space Telescope had a ringside view of the space demolition derby."
-            },
-    ]
-
-    for video in videos_list:
-        if video["id"] == video_id:
-            selected_video = video
-            break
-
-    return render(request,'video-detail.html',{"selected_video":selected_video})
+    return render(request, "videos.html", {"videos": VIDEOS})
 
 
-def processed_video(request,video_id, threshold):
-    videos_list = [
-        {
-            "id": 1,
-            "video_src": "./static/one1.mp4".lstrip("./static/"),
-            "video_thumbnail": "Cosmic Reef Visualization",
-            "video_caption": "This science visualization presents the dramatic landscape of two nebulas in the Large Magellanic Cloud. The video takes viewers on a close-up tour of the nebulas' three-dimensional structures, as deduced by scientists and artists. The visualization is an interpretation of the nebulas' complex structure and is based on images by NASA's Hubble Space Telescope."
-        },
-        {
-            "id": 2,
-            "video_src": "./static/four4.mp4".lstrip("./static/"),
-            "video_thumbnail": "Carbon Star CW Leonis Dissolve Sequence",
-            "video_caption": "This is a time-lapse set of images of the aging red giant star CW Leonis, taken on three dates: 2001, 2011, and 2016. The star is embedded inside gossamer cobwebs of dust encircling the star. These are really shells of carbon dust blown off the star. As they expand into space they change shape, as seen between the Hubble Space Telescope exposures. Brilliant searchlight beams from the star's surface poke through the dust. These beams change orientation through the different dates the Hubble photographs were taken. "
-        },
-        {
-            "id": 3,
-            "video_src": "./static/three.mp4".lstrip("./static/"),
-            "video_thumbnail": "Time-Lapse Video of Didymos-Dimorphos",
-            "video_caption": "This movie captures the breakup of the asteroid Dimorphos when it was deliberately hit by NASA's 1,200-pound Double Asteroid Redirection Test (DART) mission spacecraft on September 26, 2022. The Hubble Space Telescope had a ringside view of the space demolition derby."
-        },
-    ]
-
-    for video in videos_list:
-        if video["id"] == video_id:
-            selected_video = video
-            break
-    path = selected_video.video_src
-    video_generator.generate_sound_of_video(path, './static/sound.wav')
-    video_generator.merge_audio_video(path, 'sound.wav','./static/output_video.mp4')
+def video_detail(request, video_id):
+    video = get_video(video_id)
+    form = ThresholdForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        return redirect("sonified_video", video_id=video.id, threshold=form.cleaned_data["threshold"])
+    return render(request, "video-detail.html", {"video": video, "form": form})
 
 
-    return render(request,'processed-video.html',{"threshold_value":threshold})
+def sonified_video(request, video_id, threshold):
+    video = get_video(video_id)
+    if not 0 <= threshold <= 255:
+        raise Http404("Threshold must be between 0 and 255")
+
+    output_name = f"{video.slug}-t{threshold}.mp4"
+    output_path = Path(settings.MEDIA_ROOT) / "sonified" / output_name
+    error = None
+
+    if not output_path.exists():
+        source = finders.find(video.static_path)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        # Render to a hidden file and rename when done, so a partial file is never served.
+        tmp_path = output_path.with_name(f".{output_name}")
+        try:
+            sonify_video(source, tmp_path, SonifyConfig(threshold=threshold))
+            tmp_path.replace(output_path)
+        except Exception:
+            logger.exception("Sonifying %s failed", video.slug)
+            tmp_path.unlink(missing_ok=True)
+            error = "Something went wrong while generating the soundtrack. Please try another threshold."
+
+    return render(request, "sonified-video.html", {
+        "video": video,
+        "threshold": threshold,
+        "output_url": f"{settings.MEDIA_URL}sonified/{output_name}",
+        "error": error,
+        "form": ThresholdForm(initial={"threshold": threshold}),
+    })

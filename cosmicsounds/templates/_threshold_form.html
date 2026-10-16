@@ -1,0 +1,21 @@
+<form method="post" action="{% url 'video_detail' video.id %}" class="card" data-sonify-form>
+    {% csrf_token %}
+    <div class="form-row">
+        <label for="{{ form.threshold.id_for_label }}">{{ form.threshold.label }}</label>
+        <div class="range-wrap">
+            {{ form.threshold }}
+            <output class="range-value" for="{{ form.threshold.id_for_label }}">{{ form.threshold.value }}</output>
+        </div>
+        <span class="helptext">{{ form.threshold.help_text }}</span>
+        {{ form.threshold.errors }}
+    </div>
+    <button type="submit" class="btn btn-primary" style="margin-top:18px">{{ submit_label|default:"Generate soundtrack" }}</button>
+</form>
+
+<div class="loading" role="status" aria-live="polite">
+    <div>
+        <div class="spinner"></div>
+        <p><strong>Listening to the stars…</strong></p>
+        <p class="muted">Analysing frames and synthesising audio. This takes a few seconds.</p>
+    </div>
+</div>

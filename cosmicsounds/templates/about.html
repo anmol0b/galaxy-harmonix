@@ -1,90 +1,56 @@
-
-
 {% extends 'base.html' %}
-
 {% load static %}
+{% block title %}How it works · Galaxy Harmonix{% endblock %}
 {% block content %}
+<article class="section docs">
+    <div class="narrow">
+        <p class="eyebrow">Documentation</p>
+        <h1>How Galaxy Harmonix turns video into sound</h1>
+        <p>Sonification is the use of sound to represent data. Here the data is a video: every second, one frame is sampled and turned into one second of audio, so the soundtrack stays in sync with the picture.</p>
 
+        <h2>1. Scan two rings for stars</h2>
+        <p>Two square rings are placed around the centre of the frame, at 55% and 90% of the distance to the nearest edge. Each ring is cut into 10×10 pixel boxes. A box is "hot" if it contains any pixel brighter than the threshold you choose (0–255, converted to grayscale).</p>
+        <figure>
+            <img class="dark" src="{% static 'img/rings.jpg' %}" alt="A frame from the Cosmic Reef video with two square rings drawn around its centre; boxes that contain bright stars are highlighted in yellow." loading="lazy">
+            <figcaption>A frame from <em>Cosmic Reef</em> at threshold 80. Highlighted boxes contain bright pixels and each becomes a note.</figcaption>
+        </figure>
 
-<div class="container my-5">
-    <h1>About NASA Space Sonification</h1>
-    <p>
-        The NASA Space Sonification project is a fascinating initiative that allows individuals to explore the
-        universe through sound. By translating complex 3D space datasets into auditory experiences, this project
-        aims to provide a unique and immersive way to understand and appreciate the wonders of the cosmos.
-    </p>
-    <p>
-        The project leverages advanced instruments and sophisticated techniques to convert astronomical data into
-        sound, providing users with a different perceptual path to explore space objects and phenomena.
-    </p>
-    <h2>Our Mission</h2>
-    <p>
-        Our mission is to make the universe more accessible and engaging to a wide range of audiences, from space
-        enthusiasts to scientists. By combining science, technology, and creativity, we hope to inspire curiosity
-        and foster a deeper connection with the cosmos.
-    </p>
-</div>
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Sonification of Data</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-    }
-    h1 {
-      font-size: 24px;
-      font-weight: bold;
-    }
-    p {
-      font-size: 18px;
-      line-height: 1.5;
-      margin-bottom: 20px;
-    }
-    img {
-      max-width: 100%;
-      height: auto;
-      margin-bottom: 20px;
-    }
-  </style>
-</head>
-<body>
+        <h2>2. Map brightness to pitch</h2>
+        <p>Each hot box becomes a note. The more bright pixels it holds, the higher the note, from 500 Hz up to 1800 Hz. The inner ring plays its notes in the first half of the second and the outer ring in the second half, so a busy star field sounds like a fast arpeggio and an empty one stays quiet. At most 12 of the brightest boxes per ring are used, so notes stay long enough to hear.</p>
+        <p>Underneath, the average red level of the whole frame drives a low drone between 40 and 160 Hz: warm, red nebulae hum louder and higher than dark, blue space.</p>
+        <table>
+            <thead><tr><th>Visual feature</th><th>Sound property</th></tr></thead>
+            <tbody>
+                <tr><td>Bright pixels in a ring box</td><td>Note pitch (500–1800 Hz)</td></tr>
+                <tr><td>Number of hot boxes in a ring</td><td>Note length (half a second shared between them)</td></tr>
+                <tr><td>Average redness of the frame</td><td>Drone pitch and loudness</td></tr>
+            </tbody>
+        </table>
 
-<!-- Sonification of Data -->
-<h1>Sonification of Data</h1>
-<p>Image Sonification is the transformation of image into sounds. It helps to interpret visual data through sounds.</p>
+        <h2>3. Give the notes a timbre</h2>
+        <p>A pure sine wave sounds thin, so notes are built from a fundamental plus overtones. The drone borrows its timbre from a real recording: a Fourier transform finds the strongest frequencies in the clip, snaps them to harmonics of the target pitch, and uses their relative strengths as overtone weights.</p>
+        <figure>
+            <img src="{% static 'img/waveform.png' %}" alt="Waveform of the reference recording, roughly 15 seconds long, with amplitude peaking near 9000." loading="lazy">
+            <figcaption>The reference recording used to derive the drone's timbre.</figcaption>
+        </figure>
+        <figure>
+            <img src="{% static 'img/spectrum.png' %}" alt="Frequency spectrum of the recording with sharp peaks between 50 and 1100 Hz." loading="lazy">
+            <figcaption>Its frequency spectrum. The tallest peaks become the overtone weights.</figcaption>
+        </figure>
+        <figure>
+            <img src="{% static 'img/synthesized.png' %}" alt="A short section of the synthesised wave, showing a low oscillation with smaller ripples on top." loading="lazy">
+            <figcaption>A synthesised tone: the fundamental with overtones layered on top.</figcaption>
+        </figure>
 
-<!-- Steps involved in sonification -->
-<h1>Steps involved in sonification</h1>
+        <h2>4. Shape, mix and mux</h2>
+        <p>Every star note is shaped by an ADSR envelope (attack, decay, sustain, release) so it starts and fades like a struck bell instead of clicking on and off. Star notes and drone are summed, normalised to 16-bit audio, and ffmpeg muxes the result onto the original video. Results are cached per video and threshold, so revisiting a combination is instant.</p>
 
-<!-- Step 1: Fourier Transformation -->
-<h1>Step 1: Fourier Transformation</h1>
-<p>To generate a variety of sounds, we need Fourier Transformation of sound clips to make sine waves that can be used with varying frequencies. It generates complex sounds with the help of a combination of various sine waves of different frequencies.</p>
-<img src="{% static 'asd.png' %}" alt="Fourier Transformation">
-<img src="{% static 'fourier.png' %}" alt="Fourier Transformation">
-<img src="{% static 'fourier2.png' %}" alt="Fourier Transformation">
-<img src="{% static 'generated.png' %}" alt="Fourier Transformation">
-
-<!-- Step 2: Pixel-to-Sound Mapping -->
-<h1>Step 2: Pixel-to-Sound Mapping</h1>
-<p>Pixel values (RGBL) are mapped with the properties of sounds. And so the sounds are generated according to the scene and color composition of the present frame.</p>
-
-<!-- Step 3: Combining Waves -->
-<h1>Step 3: Combining Waves</h1>
-<p>Detail the third step of combining the waves extracted from each frame. Discuss the orchestration of this combination, akin to composing a symphony.</p>
-
-<!-- The Frame area selection -->
-<h1>The Frame Area Selection</h1>
-<p>In our solution, we have selected 2 square borders which are producing stars sounds when they go through the frames. Calculation of the percentage composition of RGB in each frame to produce background sounds.</p>
-
-
-</body>
-</html>
-
-
-
-
-
+        <h2>Run it yourself</h2>
+        <p>The engine is a plain Python package and works without the website:</p>
+        <p><code>python -m processing my_video.mp4 --threshold 80</code></p>
+        <div class="actions" style="justify-content:flex-start">
+            <a class="btn btn-primary" href="{% url 'videos' %}">Try it on a video</a>
+        </div>
+    </div>
+</article>
 {% endblock %}

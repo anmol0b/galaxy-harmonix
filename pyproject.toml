@@ -1,0 +1,18 @@
+[project]
+name = "galaxy-harmonix"
+version = "1.0.0"
+description = "Turn space videos into sound: bright stars become notes, nebula colour becomes a drone."
+requires-python = ">=3.10"
+license = { text = "MIT" }
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "spaceproject.settings"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py310"
+extend-exclude = ["experiments"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]

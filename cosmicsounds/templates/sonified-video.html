@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}{{ video.title }} (sonified) · Galaxy Harmonix{% endblock %}
+{% block content %}
+<section class="section">
+    <div class="container">
+        <p class="eyebrow"><a href="{% url 'video_detail' video.id %}">← Back to {{ video.title }}</a></p>
+        <h1>{{ video.title }}, sonified</h1>
+        <div class="detail-grid">
+            <div>
+                {% if error %}
+                <div class="alert" role="alert">{{ error }}</div>
+                {% else %}
+                <div class="player">
+                    <video controls autoplay playsinline>
+                        <source src="{{ output_url }}" type="video/mp4">
+                    </video>
+                </div>
+                <div class="meta">
+                    <span>Threshold: <strong>{{ threshold }}</strong></span>
+                    <a href="{{ output_url }}" download>Download MP4</a>
+                </div>
+                {% endif %}
+            </div>
+            <div>
+                {% include '_threshold_form.html' with submit_label="Try another threshold" %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block scripts %}{% include '_threshold_script.html' %}{% endblock %}

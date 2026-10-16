@@ -1,0 +1,14 @@
+<script>
+  document.querySelectorAll("[data-sonify-form]").forEach((form) => {
+    const range = form.querySelector('input[type="range"]');
+    const output = form.querySelector("output");
+    range.addEventListener("input", () => { output.value = range.value; });
+    form.addEventListener("submit", () => {
+      document.querySelector(".loading").classList.add("active");
+    });
+  });
+  // Hide the overlay if the user navigates back to a cached page.
+  window.addEventListener("pageshow", () => {
+    document.querySelector(".loading")?.classList.remove("active");
+  });
+</script>

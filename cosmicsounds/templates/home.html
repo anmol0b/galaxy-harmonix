@@ -1,28 +1,42 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<div class="container-fluid p-0">
-    <div class="main-video-container">
-        <video class="main-video" controls autoplay loop muted>
-            <source src="{% static 'one1.mp4' %}" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-        <div class="intro">
-            <h1>Explore the Wonders of the Universe</h1>
-            <p>Experience the universe like never before with NASA's 3D Space Sonification application. Hear the cosmos
-                and discover the beauty of celestial objects through sound.</p>
+<section class="hero">
+    <video autoplay loop muted playsinline poster="{% static 'img/rings.jpg' %}">
+        <source src="{% static featured.static_path %}" type="video/mp4">
+    </video>
+    <div class="hero-content">
+        <p class="eyebrow">Space video sonification</p>
+        <h1>Hear the universe, one star at a time</h1>
+        <p>Galaxy Harmonix listens to Hubble footage frame by frame. Bright stars become notes, the colour of the nebula becomes a drone, and the result is a soundtrack generated entirely from the pixels.</p>
+        <div class="actions">
+            <a class="btn btn-primary" href="{% url 'videos' %}">Sonify a video</a>
+            <a class="btn btn-ghost" href="{% url 'about' %}">How it works</a>
         </div>
-
     </div>
+</section>
+
+<section class="section">
     <div class="container">
-        <div class="row brief"><h2>Galaxy Harmonix</h2>
-        <p>Embark on a cosmic symphony, where the universe speaks through sound.
-
-In our innovative project, we're taking you on an auditory journey through the wonders of space. Imagine watching NASA fly-through videos and not only seeing the stunning visuals but also hearing the cosmos come alive. We're using cutting-edge techniques to transform these videos into immersive soundscapes, where each pixel's properties - like color and brightness - are translated into unique sound qualities. It's a fusion of science and art, turning the mysteries of the universe into an accessible and captivating experience for everyone. So, join us as we unlock the cosmos with the power of sound.
-
-This README provides essential information to get you started with the project.</p>
-        <a class="text-decoration-none text-center see-docs" href="{% url 'about' %}">See Docs</a></div>
+        <p class="eyebrow">The pipeline</p>
+        <h2>From pixels to sound in three steps</h2>
+        <div class="steps">
+            <div class="card">
+                <div class="num">01</div>
+                <h3>Scan</h3>
+                <p class="muted">Each second, one frame is sampled and two square rings around its centre are split into 10×10 pixel boxes.</p>
+            </div>
+            <div class="card">
+                <div class="num">02</div>
+                <h3>Map</h3>
+                <p class="muted">Boxes with pixels above your brightness threshold become notes: more bright pixels, higher pitch. Average redness sets a low drone.</p>
+            </div>
+            <div class="card">
+                <div class="num">03</div>
+                <h3>Synthesise</h3>
+                <p class="muted">Notes are built from sine-wave overtones shaped by an ADSR envelope, mixed, and muxed back onto the video with ffmpeg.</p>
+            </div>
+        </div>
     </div>
-</div>
-</div>
+</section>
 {% endblock %}

@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+myenv/
+.pytest_cache/
+.ruff_cache/
+
+# Django
+db.sqlite3
+staticfiles/
+media/
+.env
+
+# Generated audio/video
+/*.wav
+/*.mp4
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
+
+# Local backups
+.backup/
+.claude/
